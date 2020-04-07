@@ -66,7 +66,7 @@ Generate a random genome and a mutated variant. Useful to inspect the behaviour 
 
 ## Align
 
-Generate two random genomes and visualise their alignment. Uses a `type=` option to differentiate between `global`, `local`, `synapsing`, `synapsing_general`, `lcss` (longest common substring), `onegap`, `glocal`, or `perfect` (which uses the known mutation history of the genomes, and is thus inaccessible in practical applications) alignment. The aligned genomes are specified using the `genomeA=` (`random`) and `genomeB=` (`random`, `mutated`, `identical`, `reversed` or `reversedmutated` comparet to genomeA) options.
+Generate two random genomes and visualise their alignment. Uses a `type=` option to differentiate between `global`, `local`, `synapsing`, `synapsing_general`, `lcss` (longest common substring), `onegap`, `glocal`, or `perfect` (which uses the known mutation history of the genomes, and is thus inaccessible in practical applications) alignment. The aligned genomes are specified using the `genomeA=` (`random`) and `genomeB=` (`random`, `mutated`, `identical`, `reversed` or `reversedmutated` compared to genomeA) options.
 
 ## Crossover
 
