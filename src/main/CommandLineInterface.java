@@ -138,16 +138,34 @@ public abstract class CommandLineInterface {
 	}
 
 	public <T> Option<T> optionWithStringDefault(String identifier, String defaultValue, ThrowingFunction<String,T,Exception> transform) {
-		if (this.readArg(identifier).isPresent()) {
-			// It is important not to calculate the default value if it is not needed, because calculating it might depend on e.g. some other options being specified
-			return option(identifier, transform);
-		} else {
-			try {
-				return option(identifier, transform.apply(defaultValue), transform);
-			} catch (Exception e) {
-				throw new IllegalArgumentException("String-valued default option value cannot be read");
+		return new Option<T>() {
+			@Override
+			public String identifier() {
+				return identifier;
 			}
-		}
+			@Override
+			public Optional<T> defaultValue() {
+				try {
+					return Optional.of(transform.apply(defaultValue));
+				} catch (Exception e) {
+					throw new IllegalArgumentException("String-valued default option value cannot be read ("+identifier+")");
+				}
+			};
+			@Override
+			public T transform(String optionString) throws Exception {
+				return transform.apply(optionString);
+			}
+		};
+//		if (this.readArg(identifier).isPresent()) {
+//			// It is important not to calculate the default value if it is not needed, because calculating it might depend on e.g. some other options being specified
+//			return option(identifier, transform);
+//		} else {
+//			try {
+//				return option(identifier, transform.apply(defaultValue), transform);
+//			} catch (Exception e) {
+//				throw new IllegalArgumentException("String-valued default option value cannot be read ("+identifier+")");
+//			}
+//		}
 	}
 
 	/**
