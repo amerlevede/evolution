@@ -1,0 +1,78 @@
+<project name="varcross" default="jar" basedir=".">
+
+  <tstamp/>
+
+  <property name="classes" value="${basedir}/classes"/>
+  <property name="src" value="${basedir}/src"/>
+  <property name="lib" value="${basedir}/lib"/>
+  <property name="assets" value="${basedir}/assets"/>
+  <property name="jarfile" value="${basedir}/varcross.jar"/>
+  <property name="jarsrc" value="${basedir}/varcross-src.jar"/>
+  <property name="jarstandalone" value="${basedir}/varcross-standalone.jar"/>
+
+  <property name="main-class" value="main.Main"/>
+
+  <path id="classpath">
+<!--<pathelement location="${lib}/args4j-20120919.jar"/>
+    <pathelement location="${lib}/servlet-api.jar"/>
+    <pathelement location="${lib}/trove-3.0.3.jar"/>
+    <pathelement location="${lib}/whatswrong-0.2.3.jar"/> -->
+  </path>
+
+  <target name="compile" depends="clean,timestamp">
+    <mkdir dir="${classes}"/>
+    <javac srcdir="${src}" destdir="${classes}" debug="on" classpathref="classpath" includeAntRuntime="false" includes="**/*.java"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar jarfile="${jarfile}">
+      <fileset dir="${classes}" includes="**/*.class"/>
+      <fileset dir="${src}" includes="**/*.java"/>
+      <fileset dir="${assets}" />
+      <manifest>
+        <attribute name="Main-Class" value="${main-class}" />
+      </manifest>
+    </jar>
+  </target>
+
+<!-- Standalone jar includes libraries (in "classpath") -->
+  <target name="jarstandalone" depends="compile">
+    <jar jarfile="${jarstandalone}">
+      <fileset dir="${classes}" includes="**/*.class"/>
+      <fileset dir="${src}" includes="**/*.java"/>
+      <zipfileset includes="**/*.class **/*.properties" src="${lib}/args4j-20120919.jar"/>
+      <zipfileset includes="**/*.class" src="${lib}/trove-3.0.3.jar"/>
+    </jar>
+  </target>
+
+<!-- Jar with only sources -->
+  <target name="srcjar" depends="timestamp">
+    <jar jarfile="${jarsrc}">
+      <fileset dir="${src}" includes="**/*.java"/>
+      <fileset dir="${assets}" />
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${classes}"/>
+    <delete file="${jarfile}"/>
+  </target>
+
+<!-- Run jar file -->
+  <target name="run" depends="jar">
+    <java jar="${jarfile}" fork="true"/>
+  </target>
+
+  <target name="timestamp">
+    <tstamp>
+      <format property="current.time" pattern="MM/dd/yyyy hh:mm:ss aa" />
+    </tstamp>
+    <echo message="TIME: ${current.time}" />
+    <echo message="Ant version: ${ant.java.version}" />
+    <echo message="Java version: ${java.version}" />
+    <echo message="${java.vm.vendor}" />
+    <echo message="${java.vm.name}" />
+    <echo message="${java.vm.version}" />
+  </target>
+
+</project>
